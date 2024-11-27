@@ -18,7 +18,11 @@ const ViewProducts = () => {
       setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } else {
       const data = await getDocs(productsCollection);
-      setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      setProducts(
+        data.docs
+          .map((doc) => ({ ...doc.data(), id: doc.id }))
+          .filter((product) => product.category === category) // Filtrar por categoría en productosmesa
+      );
     }
   };
 
@@ -31,9 +35,8 @@ const ViewProducts = () => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.description || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = product.category === category;
     const isEnabled = product.disabled !== true;
-    return matchesCategory && matchesSearch && isEnabled;
+    return matchesSearch && isEnabled;
   });
 
   return (
