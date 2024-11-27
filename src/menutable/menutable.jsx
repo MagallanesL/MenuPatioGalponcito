@@ -13,15 +13,22 @@ const ViewProducts = () => {
 
   // Obtener productos de la colección seleccionada
   const getProducts = async () => {
+    let data;
     if (category === 'bebidas') {
-      const data = await getDocs(drinksCollection);
-      setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    } else {
-      const data = await getDocs(productsCollection);
+      // Obtener productos de la colección 'drinks' que son de la categoría 'bebidas'
+      data = await getDocs(drinksCollection);
       setProducts(
         data.docs
           .map((doc) => ({ ...doc.data(), id: doc.id }))
-          .filter((product) => product.category === category) // Filtrar por categoría solo en productosmesa
+          .filter((product) => product.category === 'bebidas') // Filtrar por categoría 'bebidas'
+      );
+    } else {
+      // Obtener productos de la colección 'productosmesa' y filtrar por categoría
+      data = await getDocs(productsCollection);
+      setProducts(
+        data.docs
+          .map((doc) => ({ ...doc.data(), id: doc.id }))
+          .filter((product) => product.category === category) // Filtrar por categoría específica
       );
     }
   };
@@ -30,13 +37,13 @@ const ViewProducts = () => {
     getProducts();
   }, [category]); // Cambiar productos cuando la categoría cambia
 
-  // Filtrar productos
+  // Filtrar productos por término de búsqueda
   const filteredProducts = products.filter((product) => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.description || '').toLowerCase().includes(searchTerm.toLowerCase());
     const isEnabled = product.disabled !== true;
-    return matchesSearch && isEnabled; // No filtramos por categoría si la colección es drinks
+    return matchesSearch && isEnabled; // Filtrar solo los productos habilitados
   });
 
   return (
