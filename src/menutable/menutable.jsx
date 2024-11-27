@@ -9,14 +9,14 @@ const ViewProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const productsCollection = collection(db, 'productosmesa');
-  const drinksCollection = collection(db, 'drinks');
+ 
 
   // Obtener productos de la colección seleccionada
   const getProducts = async () => {
     let data;
     if (category === 'bebidas') {
       // Obtener productos de la colección 'drinks' que son de la categoría 'bebidas'
-      data = await getDocs(drinksCollection);
+      data = await getDocs(productsCollection);
       setProducts(
         data.docs
           .map((doc) => ({ ...doc.data(), id: doc.id }))
