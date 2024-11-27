@@ -55,7 +55,7 @@ const ViewProducts = () => {
             <div className="productDetails">
               <h3>{product.name}</h3>
               {category === 'bebidas' ? (
-                <p className="productPrice">${product.cost}</p>
+                <p className="productPrice">${product.price}</p>
               ) : (
                 <>
                   <p>{product.description}</p>
