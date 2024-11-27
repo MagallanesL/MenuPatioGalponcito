@@ -5,7 +5,7 @@ import './menu.css';
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState('all');
+  const [category, setCategory] = useState('pizza'); // Cambiar a una categoría inicial válida
   const [searchTerm, setSearchTerm] = useState('');
 
   const productsCollection = collection(db, 'productosmesa');
@@ -31,8 +31,9 @@ const ViewProducts = () => {
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.description || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = product.category === category;
     const isEnabled = product.disabled !== true;
-    return matchesSearch && isEnabled;
+    return matchesCategory && matchesSearch && isEnabled;
   });
 
   return (
@@ -48,7 +49,6 @@ const ViewProducts = () => {
         />
       </div>
       <div className="categoryMenu">
-        <button onClick={() => setCategory('all')}>Todos</button>
         <button onClick={() => setCategory('pizza')}>Pizzas</button>
         <button onClick={() => setCategory('sandwich')}>Sandwiches</button>
         <button onClick={() => setCategory('bebidas')}>Bebidas</button>
