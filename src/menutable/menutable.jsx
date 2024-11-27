@@ -9,19 +9,19 @@ const ViewProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const productsCollection = collection(db, 'productosmesa');
-  const bebidasCollection = collection(db, 'bebidas');
+  const drinksCollection = collection(db, 'drinks');
 
   // Obtener productos de la colección seleccionada
   const getProducts = async () => {
     if (category === 'bebidas') {
-      const data = await getDocs(bebidasCollection);
+      const data = await getDocs(drinksCollection);
       setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } else {
       const data = await getDocs(productsCollection);
       setProducts(
         data.docs
           .map((doc) => ({ ...doc.data(), id: doc.id }))
-          .filter((product) => product.category === category) // Filtrar por categoría en productosmesa
+          .filter((product) => product.category === category) // Filtrar por categoría solo en productosmesa
       );
     }
   };
@@ -36,7 +36,7 @@ const ViewProducts = () => {
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.description || '').toLowerCase().includes(searchTerm.toLowerCase());
     const isEnabled = product.disabled !== true;
-    return matchesSearch && isEnabled;
+    return matchesSearch && isEnabled; // No filtramos por categoría si la colección es drinks
   });
 
   return (
