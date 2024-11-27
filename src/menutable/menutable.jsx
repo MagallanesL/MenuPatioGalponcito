@@ -46,7 +46,7 @@ const ViewProducts = () => {
       </div>
       <div className="categoryMenu">
         <button onClick={() => setCategory('pizza')}>Pizzas</button>
-        <button onClick={() => setCategory('sandwich')}>Sandwiches</button>
+        <button onClick={() => setCategory('sandwich')}>Sandwich</button>
         <button onClick={() => setCategory('bebidas')}>Bebidas</button>
       </div>
       <div className="productsGrid">
@@ -58,6 +58,7 @@ const ViewProducts = () => {
                 <p className="productPrice">${product.price}</p>
               ) : (
                 <>
+                <p>{product.name}</p>
                   <p>{product.description}</p>
                   <p className="productPrice">${product.price}</p>
                 </>
