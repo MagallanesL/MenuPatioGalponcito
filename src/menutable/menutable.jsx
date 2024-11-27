@@ -9,6 +9,7 @@ const ViewProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const productsCollection = collection(db, 'productosmesa');
+  const bebidasCollection = collection(db, 'bebidas');
 
   const getProducts = async () => {
     const data = await getDocs(productsCollection);
@@ -48,7 +49,7 @@ const ViewProducts = () => {
         {/* <button onClick={() => setCategory('all')}>Todos</button> */}
         <button onClick={() => setCategory('pizza')}>Pizzas</button>
         <button onClick={() => setCategory('sandwich')}>Sandwiches</button>
-        {/* <button onClick={() => setCategory('1/2 y 1/2')}>Media y Media</button> */}
+        <button onClick={() => setCategory('bebidas')}>Bebidas</button> 
       </div>
       <div className="productsGrid">
         {filteredProducts.map((product) => (
