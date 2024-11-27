@@ -11,27 +11,29 @@ const ViewProducts = () => {
   const productsCollection = collection(db, 'productosmesa');
   const bebidasCollection = collection(db, 'bebidas');
 
+  // Obtener productos de la colección seleccionada
   const getProducts = async () => {
-    const data = await getDocs(productsCollection);
-    setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    if (category === 'bebidas') {
+      const data = await getDocs(bebidasCollection);
+      setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } else {
+      const data = await getDocs(productsCollection);
+      setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    }
   };
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [category]); // Cambiar productos cuando la categoría cambia
 
   // Filtrar productos
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = category === 'all' || product.category === category;
     const matchesSearch =
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      (product.description || '').toLowerCase().includes(searchTerm.toLowerCase());
     const isEnabled = product.disabled !== true;
-    return matchesCategory && matchesSearch && isEnabled;
+    return matchesSearch && isEnabled;
   });
-
-
-  
 
   return (
     <div className="productsPage">
@@ -46,18 +48,24 @@ const ViewProducts = () => {
         />
       </div>
       <div className="categoryMenu">
-        {/* <button onClick={() => setCategory('all')}>Todos</button> */}
+        <button onClick={() => setCategory('all')}>Todos</button>
         <button onClick={() => setCategory('pizza')}>Pizzas</button>
         <button onClick={() => setCategory('sandwich')}>Sandwiches</button>
-        <button onClick={() => setCategory('bebidas')}>Bebidas</button> 
+        <button onClick={() => setCategory('bebidas')}>Bebidas</button>
       </div>
       <div className="productsGrid">
         {filteredProducts.map((product) => (
           <div className="productCard" key={product.id}>
             <div className="productDetails">
               <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p className="productPrice">${product.price}</p>
+              {category === 'bebidas' ? (
+                <p className="productPrice">${product.cost}</p>
+              ) : (
+                <>
+                  <p>{product.description}</p>
+                  <p className="productPrice">${product.price}</p>
+                </>
+              )}
             </div>
           </div>
         ))}
